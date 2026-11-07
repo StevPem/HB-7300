@@ -113,3 +113,25 @@ toggles; `4F`/`50`/`56`/`57`/`58`/`65`/`66` are confirmed to **exist** in the fi
 (with their get/set handlers) but their exact labels (·) would need per-handler tracing to
 pin down definitively — they are DSP/filter-related function toggles added across IC-7300
 firmware revisions.
+
+### `0x16` subcommands `4F/50/56/57/58/65/66` — resolved from firmware
+
+Each was traced to its get/set handler and leaf function. All write **DSP shadow
+registers** (value + the `0x40` "push-to-DSP" dirty bit) in the DSP-filter module
+(`0x200300xx`), confirming they are DSP/filter function controls.
+
+| Sub | Firmware mechanism | Identification | Conf. |
+|-----|--------------------|----------------|-------|
+| 56 | per-(mode,filter) 2-value via `FUN_20027DEC`/`FUN_20027E0C`; `SHARP`/`SOFT` strings present | **IF filter shape SHARP/SOFT** (per mode & FIL1/2/3) | high |
+| 57 | per-mode 3-value (`DAT_200306E0[mode]`), issues DSP command `0x11` via `FUN_20046BF0`; `Filter Type (HF)/(50M-)` strings | **DSP "Filter Type"** (per-mode filter preset) | med-high |
+| 58 | per-mode 3-value, writes per-mode table (`DAT_2002F770+0x26A`) + DSP update | per-mode DSP filter parameter (3-state) | med |
+| 65 | 1-bit: sets bit 3 of DSP reg `DAT_200306C4`, getter reads it back | DSP on/off function (1-bit) | med |
+| 66 | on/off: sets reg bit `0x20`, triggers timed action `FUN_2003AA4C(8,100)` | DSP/audio on/off + triggered action | med |
+| 50 | per-mode 2-value via callback (`FUN_2000CA08`→fn ptr, `FUN_200583B0(2)`) | per-mode DSP function toggle (2-state) | med |
+| 4F | handler chain `0x2000CD46`(set)/`0x2000F7F2`(get); DSP toggle | DSP function toggle | low |
+
+**Note:** mechanisms are firmware-confirmed; `56`/`57` map to the on-screen `SHARP/SOFT`
+and `Filter Type` settings. The remaining five are DSP-filter-module toggles whose exact
+product-menu label requires either Icom's authoritative `0x16` reference or the DSP command
+set — the latter is the **layer-3 (DSP/FPGA) gap** noted in the roadmap, since labels like
+these are defined by the DSP firmware's command numbers (e.g. the `0x11` seen for `0x57`).
