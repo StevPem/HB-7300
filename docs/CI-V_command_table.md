@@ -45,3 +45,71 @@ Source: dispatcher `FUN_2000b03c`; command table @`0x2018aa2c` (8 B/entry), capa
 **Not implemented** (type=0, correctly reflecting IC-7300 hardware): `0x0C/0x0D` freq offset, `0x12` antenna select (single ANT), `0x1F` DV/GPS, `0x20/0x22–0x24` DV.
 
 Total implemented command/subcommand combinations: **143** (matches the 143-entry capability table and 144-case handler dispatch).
+
+---
+
+## CI-V `0x14` / `0x15` / `0x16` subcommand decode
+
+Subcommand bytes and the get/set handler structure were **extracted from the firmware**
+(command table `@0x2018AA2C`, capability table `@0x2018AB84`: each entry is
+`{flags/len, setter_ptr@+4, getter_ptr@+8, common@+c}`). Parameter names are the
+established IC-7300 CI-V assignments; they are **corroborated by the firmware** here —
+the counts match exactly, `0x15` entries have a **null setter** (read-only), and the
+`0x15` meter readers branch to one ordered handler family. Confidence is marked where a
+label is firmware-anchored (✓) vs. standard-assignment (·).
+
+### `0x14` — Set/read levels (payload 1..2 BCD bytes, value 0000–0255)
+
+| Sub | Parameter | | Sub | Parameter |
+|-----|-----------|-|-----|-----------|
+| 01 | AF (volume) level | | 0D | Notch filter position |
+| 02 | RF gain | | 0E | Speech compressor level |
+| 03 | Squelch level | | 0F | Break-in (BK-IN) delay |
+| 06 | Noise Reduction (NR) level | | 12 | Noise Blanker (NB) depth/level |
+| 07 | Twin PBT inner | | 15 | Monitor gain |
+| 08 | Twin PBT outer | | 16 | VOX gain |
+| 09 | CW pitch | | 17 | Anti-VOX gain |
+| 0A | RF output power | | 19 | LCD backlight brightness |
+| 0B | MIC gain | | | |
+| 0C | Keyer (CW) speed | | | (18 subcommands — matches firmware) |
+
+### `0x15` — Read meters (read-only; setter is null in firmware ✓)
+
+| Sub | Meter |
+|-----|-------|
+| 01 | Squelch / noise status (S-meter squelch condition) ✓ reads via `FUN_2002016C` |
+| 02 | S-meter level |
+| 05 | Squelch status (various) |
+| 07 | Overflow (OVF) indicator |
+| 11 | RF power (PO) meter |
+| 12 | SWR meter ✓ (computed, `FUN_200130B0`/`FUN_20027DEC`) |
+| 13 | ALC meter |
+| 14 | Compression (COMP) meter |
+| 15 | Vd (PA drain voltage) meter |
+| 16 | Id (PA drain current) meter |
+
+(10 meters — matches firmware; `0x15/11..16` share one ordered reader family at
+`0x2000FE0E + 8·n` ✓.)
+
+### `0x16` — Set/read functions on/off (payload 1 byte: 00=off, 01=on, or an enum)
+
+| Sub | Function | | Sub | Function |
+|-----|----------|-|-----|----------|
+| 02 | Preamp (0/1/2) | | 48 | Manual notch (MNF) on/off |
+| 12 | AGC (off/fast/mid/slow) | | 4F | DSP IF filter type (sharp/soft) · |
+| 22 | Noise Blanker (NB) on/off | | 50 | Manual notch width · |
+| 40 | Noise Reduction (NR) on/off | | 56 | DSP filter / twin-peak related · (fw `FUN_200130B0`) |
+| 41 | Auto notch (ANF) on/off | | 57 | function toggle · (fw `FUN_20030370`) |
+| 42 | Repeater tone (TONE) on/off | | 58 | function toggle · |
+| 43 | Tone squelch (TSQL) on/off | | 65 | function toggle · |
+| 44 | Speech compressor on/off | | 66 | function toggle · |
+| 45 | Monitor on/off | | | |
+| 46 | VOX on/off | | | (19 subcommands — matches firmware) |
+| 47 | Break-in (BK-IN) on/off | | | |
+
+**Confidence:** `0x14` and `0x15` are firmware-structure-confirmed and match the public
+IC-7300 CI-V reference exactly. For `0x16`, subcommands `02`–`48` are the well-established
+toggles; `4F`/`50`/`56`/`57`/`58`/`65`/`66` are confirmed to **exist** in the firmware
+(with their get/set handlers) but their exact labels (·) would need per-handler tracing to
+pin down definitively — they are DSP/filter-related function toggles added across IC-7300
+firmware revisions.
