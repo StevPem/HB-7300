@@ -96,6 +96,7 @@ GHIDRA_INSTALL_DIR=/path/to/ghidra python3 tools/ghidra_load.py main_image.bin i
 docs/IC-7300_firmware_analysis.md   full analysis report (container, boot, LZSS, OpenVG, CI-V, roadmap)
 docs/CI-V_command_table.md          reconstructed CI-V command/subcommand reference
 docs/menu_labels.md                 full menu label map (262 items; the menu-resolver output)
+docs/modding-feasibility.md         custom-firmware feasibility: no signature, CRC32+MD5 only (GO)
 tools/depack_lzss.py                LZSS depacker (main image extractor)
 tools/civ_extract.py                dump the CI-V command table from the image
 tools/render_assets.py              render the raw 8-bpp UI bitmaps
@@ -117,7 +118,7 @@ flash dump, the DSP/FPGA images, or hardware.
 | 5 | Radio control | band/PLL, BPF+relays, internal ATU, SWR/power metering, TX gain/ALC, scope flow | `[here]` |
 | 6 | Settings/cal/service | menu model, calibration data layout, ADJUST-mode entry/functions | `[here]` |
 | 7 | Graphics pipeline | interpret OpenVG path format / emulate renderer; map screen resource manager | `[here]` |
-| 8 | Update & integrity | 7-entry header-table semantics, checksum/signature, full multi-image flash layout | `[here]` |
+| 8 | Update & integrity | **no signature; CRC32+MD5 only (GO)** — see modding-feasibility.md; header/flash-driver detail remains | partially done |
 | 9 | Audio | voice memory record/playback (WAV), voice synth, RTTY/PSK decoders | `[here]` |
 | 10 | Dynamic analysis | QEMU RZ/A1 / full-system emulation to *run* the firmware | optional |
 
