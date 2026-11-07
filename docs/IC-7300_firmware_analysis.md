@@ -283,3 +283,38 @@ resolves the remaining CI-V `0x16` DSP settings as far as static analysis allows
 per-item *handler* pointer is runtime-bound (BSS), so a few CI-V subcommands can't be tied
 to a specific label statically — the item→handler map is built during boot, which would
 need dynamic analysis (roadmap layer 10) to capture.
+
+---
+
+## 13. Dynamic analysis for the last four `0x16` subcommands (`4F/50/58/65/66`)
+
+**Concrete state variables (resolved statically via the handlers' `DAT_` pointers):**
+
+| Sub | Writes | Variable | Cluster |
+|-----|--------|----------|---------|
+| 65 | bit 3 of `*0x203902F9` (getter reads same) | `0x203902F9` | DSP control flags `0x203902D4–F9` |
+| 66 | bit 5 (`0x20`) of `*0x203902D8` + triggers action | `0x203902D8` | DSP control flags |
+| 58 | per-mode entry in table at `0x203DE4CC+0x26A` | `0x203DE4CC` | per-mode operating state `0x203DE1xx` |
+| 50 | per-mode 2-value via callback (`0x203DE174`) | `0x203DE174` | per-mode operating state |
+| 4F | (handler is a trampoline chain; variable not resolved) | — | — |
+
+So `65/66` are **DSP global on/off flags** and `58/50` are **per-mode DSP settings** — the
+precise memory each controls is known.
+
+**Why the human label needs full-system dynamic analysis:** the menu-item → handler binding
+is constructed in RAM at boot, and these handlers are reached through trampoline chains that
+require live RTOS register/state context. A Unicorn harness that runs an isolated handler
+**derails on an invalid instruction within ~18 hops** (verified), because the surrounding
+state pointers aren't set up. Naming them therefore needs one of:
+
+1. **Full-system emulation** — a QEMU **RZ/A1** machine model (not upstream) or a Unicorn
+   harness with modeled RZ/A1 peripherals (clock/INTC/timers/VDC) + RTOS + the DSP/FPGA
+   handshake. Large, and partly gated by the **layer-3 DSP/FPGA gap** (the DSP must answer
+   during boot for menu init to complete).
+2. **On-radio probing** (practical, for a radio owner) — read each subcommand over CI-V and
+   watch which setting the radio reports, toggling to confirm. Tool:
+   [`tools/civ_probe_radio.py`](../tools/civ_probe_radio.py). Read frames are non-destructive
+   (`FE FE 94 E0 16 <sub> FD`); toggling asks first.
+
+Static analysis is exhausted for these four; the setup and exact targets for both dynamic
+routes are provided.

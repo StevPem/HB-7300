@@ -100,6 +100,7 @@ tools/depack_lzss.py                LZSS depacker (main image extractor)
 tools/civ_extract.py                dump the CI-V command table from the image
 tools/render_assets.py              render the raw 8-bpp UI bitmaps
 tools/ghidra_load.py                PyGhidra loader (correct base + flash mapped)
+tools/civ_probe_radio.py            on-radio dynamic probe for unresolved CI-V 0x16 subcommands
 ```
 
 ## Roadmap — what's left to fully understand the firmware
