@@ -256,3 +256,30 @@ The live CI-V engine was located and reversed (not taken from Icom docs):
 - Interpreter is **table-driven**: command byte (must be <`0x2B`) indexes a **command table @`0x2018AA2C`** (8 B/entry → type + subcommand-list pointer); the subcommand byte is matched in a `0xFD`-terminated list; a **capability table @`0x2018AB84`** (16 B/entry) gives permission flags + min/max payload length; execution goes through a **143-case handler dispatch** (`FUN_201114C8`).
 
 The complete command/subcommand table (33 commands, 143 combinations, with payload-length limits) was dumped directly from these tables — see **`CI-V_command_table.md`**. Highlights: freq set/read `0x00/0x05/0x03` (5-byte BCD), mode `0x01/0x06`, levels `0x14` (18 subcmds), meters `0x15` (10), functions `0x16` (19), misc `0x1A` (20), scope `0x27` (16), and the dual-watch `0x25/0x26` commands that confirm this is late firmware. Commands `0x0C/0x0D/0x12/0x1F` are present-but-disabled (type 0), correctly matching IC-7300 hardware (no freq-offset, single antenna, no DV/GPS).
+
+---
+
+## 12. Menu string-resource resolver & label map
+
+The on-screen menu labels are **direct inline ASCII pointers** inside static per-item
+descriptors — not runtime-resolved resource IDs. Each item (≈48 bytes) is:
+
+```
++0x00 item/screen id      +0x10 English label char*   +0x1C Japanese label char*
++0x04 type code           +0x14 shared marker 0x20359E5C   +0x24 value-list (char*[])
++0x08 1                   +0x18 0                         +0x28 handler (runtime RAM ptr)
++0x0C 0                   +0x20 marker 0x20359E5C         +0x2C flags (e.g. 0x00641301)
+```
+
+Scanning for the `+0x10 label` / `+0x14 == 0x20359E5C` pattern enumerates **262 menu
+items**, 102 with explicit value-lists (e.g. `Filter`→FIL1/FIL2/FIL3, `Filter Type`→
+SHARP/SOFT, `[NOTCH] Switch`→Auto/Manual/Auto-Manual, `Mode`→SSB/LSB/…/AM,
+`SSB TBW`→WIDE/MID/NAR). Full list in [`CI-V_command_table.md`](CI-V_command_table.md)'s
+companion [`menu_labels.md`](menu_labels.md).
+
+This confirms the firmware is **bilingual** (English + Japanese labels per item) and
+resolves the remaining CI-V `0x16` DSP settings as far as static analysis allows:
+`0x56`=Filter Type (SHARP/SOFT), `0x57`=Filter (FIL1/2/3), `0x58`≈[NOTCH] Switch. The
+per-item *handler* pointer is runtime-bound (BSS), so a few CI-V subcommands can't be tied
+to a specific label statically — the item→handler map is built during boot, which would
+need dynamic analysis (roadmap layer 10) to capture.

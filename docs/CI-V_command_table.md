@@ -148,3 +148,31 @@ correlation terminates one hop short of a human label for `0x58/0x65/0x66`; nami
 needs the menu string-resource map (same resource-manager indirection documented in §7a)
 or the DSP command reference. `0x56`/`0x57` remain the only two of the seven with a
 firmware-anchored name.
+
+#### Menu string-resource resolver — and refined `0x16` names
+
+The menu label mechanism was reversed: each menu item is a static descriptor with a
+**direct inline label `char*` at `+0x10`** (English) and a **Japanese label at `+0x1C`**,
+tagged by a shared marker `0x20359E5C` at `+0x14`, with the **value-list at `+0x24`** and
+flags at `+0x2C`. (Labels are plain strings, not runtime resource IDs; the per-item
+*handler* field at `+0x28` is a runtime RAM/BSS pointer, so the CI-V→item binding is set
+at runtime and cannot be followed statically.) Scanning this pattern yields **262 menu
+items** (102 with value-lists) — see [`menu_labels.md`](menu_labels.md).
+
+Reading the value-lists refines the earlier `0x16` guesses:
+
+| Sub | Menu item | Value-list | Identification | Conf. |
+|-----|-----------|-----------|----------------|-------|
+| 56 | **Filter Type (HF)/(50M-)** | SHARP, SOFT | IF filter shape (per mode/filter) | high |
+| 57 | **Filter** | FIL1, FIL2, FIL3 | IF filter # select (per mode; DSP cmd 0x11) | med-high |
+| 58 | **[NOTCH] Switch (SSB)/(AM)** (candidate) | Auto, Manual, Auto/Manual | notch mode (3-state, per mode) — *candidate by 3-value/per-mode match* | med |
+| 65 | — | — | 1-bit global DSP toggle (reg `DAT_200306C4` bit 3) — not statically linked to a label | low |
+| 66 | — | — | on/off + triggered action (`FUN_2003AA4C`) — not statically linked | low |
+| 50 | — | — | per-mode 2-value DSP toggle — not statically linked | low |
+| 4F | — | — | DSP toggle — not statically linked | low |
+
+`56`/`57` are now value-list-confirmed (correcting the earlier `0x57`="Filter Type" guess —
+"Filter Type" is the SHARP/SOFT item = `0x56`; `0x57` is the FIL1/2/3 **Filter** selector).
+`58` is a strong candidate (3-state per-mode matches **[NOTCH] Switch**). `65/66/50/4F`
+could not be tied to a specific label because the item→handler binding is runtime-resolved;
+the full label map is nonetheless available for any menu-driven setting.

@@ -95,6 +95,7 @@ GHIDRA_INSTALL_DIR=/path/to/ghidra python3 tools/ghidra_load.py main_image.bin i
 ```
 docs/IC-7300_firmware_analysis.md   full analysis report (container, boot, LZSS, OpenVG, CI-V, roadmap)
 docs/CI-V_command_table.md          reconstructed CI-V command/subcommand reference
+docs/menu_labels.md                 full menu label map (262 items; the menu-resolver output)
 tools/depack_lzss.py                LZSS depacker (main image extractor)
 tools/civ_extract.py                dump the CI-V command table from the image
 tools/render_assets.py              render the raw 8-bpp UI bitmaps

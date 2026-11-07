@@ -1,0 +1,266 @@
+# IC-7300 menu label map (reversed from firmware v1.42)
+
+Menu items are static descriptors: English label `char*` at `+0x10`, shared marker `0x20359E5C` at `+0x14`, Japanese label at `+0x1C`, value-list at `+0x24`, flags at `+0x2C`. Enumerated by scanning that pattern — 262 unique items.
+
+- (All data is deleted.)
+- (Some memory are cleared.)
+- (Symbol)
+- 001 SET
+- <<REC Start>>
+- <<REC Stop>>
+- ACC MOD Level
+- ACC/USB AF Beep/Speech... Output  — options: OFF, ON
+- ACC/USB AF Output Level
+- ACC/USB AF SQL  — options: OFF (Open), ON
+- ACC/USB IF Output Level
+- ACC/USB Output Select  — options: AF, IF
+- AUDIO SCOPE SET
+- Are you sure?
+- Auto Monitor  — options: OFF, ON
+- Averaging  — options: OFF, 2, 3, 4
+- BW Popup (FIL)  — options: OFF, ON
+- BW Popup (PBT)  — options: OFF, ON
+- Band Edge Beep  — options: OFF, ON (Default), ON (User), ON (User) & TX Limit
+- Beep (Confirmation)  — options: OFF, ON
+- Beep Level
+- Beep Level Limit  — options: OFF, ON
+- CANCEL
+- CENTER Type Display  — options: Filter Center, Carrier Point Center, Carrier Point Center (Abs. Freq.)
+- CI-V Address
+- CI-V Baud Rate  — options: 4800, 9600, 19200, Auto
+- CI-V Output (for ANT)  — options: OFF, ON
+- CI-V Transceive  — options: OFF, ON
+- CI-V USB Baud Rate  — options: 4800, 9600, 19200, 38400, 57600, 115200, Auto
+- CI-V USB Echo Back  — options: OFF, ON
+- CI-V USB Port  — options: Link to [REMOTE], Unlink from [REMOTE]
+- CLOSE
+- COMP  — options: OFF, ON
+- COMPLETED!
+- CW Normal Side  — options: LSB, USB
+- CW-KEY SET
+- Calibration Marker  — options: OFF, ON
+- Cancel edit?
+- Cannot delete during playback.
+- Cannot delete while logging.
+- Cannot open the folder.
+- Cannot playback this file.
+- Capturing.
+- Clear
+- Clear?
+- Count Up Trigger  — options:   , M1, M2, M3, M4, M5, M6, M7, M8
+- DATA MOD  — options: MIC, ACC, MIC,ACC, USB, MIC,USB
+- DATA OFF MOD  — options: MIC, ACC, MIC,ACC, USB, MIC,USB
+- DSP is not working correctly.
+- Date
+- Decode Log  — options: OFF, ON
+- Default
+- Delete
+- Delete All
+- Delete All Folders
+- Delete all files?
+- Delete all folders?
+- Delete all memo pads?
+- Delete file?
+- Delete folder?
+- Display Font  — options: Basic, Round
+- Display Language  — options: English, Japanese
+- Display Type  — options: A, B
+- Dot/Dash Ratio
+- EDIT
+- EDIT/SET
+- Edit
+- Edit Name
+- Edit the Preset Memory
+- Emergencies.
+- FFT Scope Waterfall Display  — options: OFF, ON
+- FFT Scope Waveform Color
+- FFT Scope Waveform Type  — options: Line, Fill
+- FILE NAME
+- FIRMWARE UPDATE
+- File Information
+- File Split  — options: OFF, ON
+- File Type  — options: Text, HTML
+- Filter  — options: FIL1, FIL2, FIL3
+- Filter BW
+- Filter Type (50M - )  — options: SHARP, SOFT
+- Filter Type (HF)  — options: SHARP, SOFT
+- Fixed Edges
+- Folder Information
+- Format OK?
+- Full Keyboard Layout  — options: English, German, French
+- Illegal Data.
+- Illegal file name.
+- Inhibit Timer at USB Connection  — options: OFF, ON
+- Insert
+- KEYER 001
+- KEYER MEMORY
+- Key Type  — options: Straight, Bug, Paddle
+- Keyboard Type  — options: Ten-key, Full Keyboard
+- Keyer Repeat Time
+- L
+- LCD Backlight
+- Load file?
+- Load the preset memory?
+- Lock Function  — options: MAIN DIAL, PANEL
+- M
+- MAIN DIAL Auto TS  — options: OFF, Low, High
+- MEMORY
+- MEMORY MENU
+- MEMORY NAME
+- MF Band ATT  — options: OFF, ON
+- MIC Up/Down Keyer  — options: OFF, ON
+- MIC Up/Down Speed  — options: Slow, Fast
+- MODE SPEECH  — options: OFF, ON
+- Marker Position (FIX Type/SCROLL Type)  — options: Filter Center, Carrier Point
+- Max Hold  — options: OFF, 10s Hold, ON
+- Memo Pad Quantity  — options: 5, 10
+- Memory Clear
+- Memory Name  — options: OFF, ON
+- Memory Write
+- Meter Peak Hold  — options: OFF, ON
+- Mode  — options: SSB, LSB, LSB-D, USB, USB-D, CW, CW-R, RTTY, RTTY-R, AM
+- Multi-func. Meter OFF
+- N
+- NEXT
+- NO
+- No SD Card is found.
+- Now recording QSO.
+- Number Style  — options: Normal
+- OK
+- Only 1000 files can be displayed.
+- Opening Message  — options: OFF, ON
+- Oscilloscope Waveform Color
+- Overwrite read-only file?
+- Overwrite?
+- PLAY FILES
+- PRE-REC for PTT Auto REC  — options: OFF, 5sec, 10sec, 15sec
+- PRESET
+- PTT Auto REC  — options: OFF, ON
+- PTT Port Function  — options: PTT Input, PTT Input + SEND Output
+- Paddle Polarity  — options: Normal, Reverse
+- Partial Reset?
+- Please wait...
+- Power ON Check  — options: OFF, ON
+- Present Number
+- QRZ?
+- QSO RECORDER
+- QSO recording has stopped.
+- QUICK MENU
+- Quick SPLIT  — options: OFF, ON
+- REC
+- REC Mode  — options: TX&RX, RX Only
+- REC/SET
+- REF Adjust
+- RF/SQL Control  — options: Auto, SQL, RF+SQL
+- RTTY DECODE LOG
+- RTTY DECODE LOG VIEW
+- RTTY DECODE LOG VIEWER
+- RTTY DECODE SET
+- RTTY Decode Baud Rate  — options: 4800, 9600, 19200, 38400
+- RTTY Decode Log has paused.
+- RTTY Decode Log is active.
+- RTTY Keying Polarity  — options: Normal, Reverse
+- RTTY MEMORY
+- RTTY Mark Frequency  — options: 1275, 1615, 2125
+- RTTY Shift Width  — options: 170, 200, 425
+- RX REC Condition  — options: Always, Squelch Auto
+- Recording started.
+- Recording stopped.
+- Repeat Time
+- Reset All Edges?
+- Reset to the default settings?
+- Restart the IC-7300.
+- Rise Time  — options: 2ms, 4ms, 6ms, 8ms
+- S-Level SPEECH  — options: OFF, ON
+- SCAN Resume  — options: OFF, ON
+- SCAN SET
+- SCAN Speed  — options: Slow, Fast
+- SCOPE SET
+- SCREEN CAPTURE Completed.
+- SD Card error.
+- SD Card is full.
+- SD Card is locked.
+- SD Card was removed.
+- SET
+- SPACE  — options: ./@, ABC, DEF, GHI, JKL, MNO, PQRS, TUV, WXYZ
+- SPEECH Language  — options: English, Japanese
+- SPEECH Level
+- SPEECH Speed  — options: Slow, Fast
+- SPLIT LOCK  — options: OFF, ON
+- SSB TBW  — options: WIDE, MID, NAR
+- SSB TX Bandwidth
+- SSB-D TX Bandwidth
+- SSB/CW Synchronous Tuning  — options: OFF, ON
+- Save Form  — options: Now Ver, Old Ver (1.40), Old Ver (1.30), Old Ver (1.20 - 1.21), Old Ver (1.00 - 1.14)
+- Save file?
+- Save to the Preset Memory
+- Scope during Tx (CENTER Type)  — options: OFF, ON
+- Screen Capture File Type  — options: PNG, BMP
+- Screen Capture [POWER] SW  — options: OFF, ON
+- Screen Saver  — options: OFF, 15min, 30min, 60min
+- Side Tone Level
+- Side Tone Level Limit  — options: OFF, ON
+- Skip Time  — options: 3sec, 5sec, 10sec, 30sec
+- Stop recording?
+- Switch to Full Keyboard
+- Switch to Tenkey
+- TX REC Audio  — options: Direct, Monitor
+- Time
+- Time Stamp  — options: OFF, ON
+- Time Stamp (Frequency)  — options: OFF, ON
+- Time Stamp (Time)  — options: Local, UTC
+- Time-Out Timer (CI-V)  — options: OFF, 3min, 5min, 10min, 20min, 30min
+- USB Keying (CW)  — options: OFF, DTR, RTS
+- USB Keying (RTTY)  — options: OFF, DTR, RTS
+- USB MOD Level
+- USB SEND  — options: OFF, DTR, RTS
+- USB Serial Function  — options: CI-V, RTTY Decode
+- UTC Offset
+- Unload the preset memory?
+- Unmount OK?
+- Unmount is completed.
+- Updating DSP/FPGA firmware.
+- Updating MAIN CPU firmware.
+- User Band Edge
+- VBW  — options: Narrow, Wide
+- VOICE PLAYER
+- VOICE TX RECORD
+- VOICE TX RECORD  
+- VOICE TX SET
+- Waterfall Display  — options: OFF, ON
+- Waterfall Marker Auto-hide  — options: OFF, ON
+- Waterfall Peak Color Level  — options: Grid 1, Grid 2, Grid 3, Grid 4, Grid 5, Grid 6, Grid 7, Grid 8
+- Waterfall Size (Expand Screen)  — options: Small, Mid, Large
+- Waterfall Speed  — options: Slow, Mid, Fast
+- Waveform Color (Current)
+- Waveform Color (Line)
+- Waveform Color (Max Hold)
+- Waveform Type  — options: Fill, Fill+Line
+- Write
+- Write Memory?
+- Write?
+- [NOTCH] Switch (AM)  — options: Auto, Manual, Auto/Manual
+- [NOTCH] Switch (SSB)  — options: Auto, Manual, Auto/Manual
+- [SPEECH/LOCK] Switch  — options: SPEECH/LOCK, LOCK/SPEECH
+- [TUNER] Switch  — options: Manual, Auto
+- cannot be edited. Please unload it.
+- caution.
+- close to the antenna during TX.
+- corrected.
+- failed.
+- firmware.
+- folder.
+- get close to the antenna during TX.
+- in FAT/FAT32.
+- incompatible version
+- m
+- memories?
+- n
+- on the SD Card first?
+- on your PC.
+- restart.
+- retry updating the firmware.
+- stopped.
+- stream end
+- turned OFF.
+- will be saved.
