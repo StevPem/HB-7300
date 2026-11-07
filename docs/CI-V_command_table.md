@@ -135,3 +135,16 @@ and `Filter Type` settings. The remaining five are DSP-filter-module toggles who
 product-menu label requires either Icom's authoritative `0x16` reference or the DSP command
 set — the latter is the **layer-3 (DSP/FPGA) gap** noted in the roadmap, since labels like
 these are defined by the DSP firmware's command numbers (e.g. the `0x11` seen for `0x57`).
+
+#### Route (a) attempt — menu-label correlation for `0x58/0x65/0x66`
+
+Traced the menu-side callbacks into a **function-ID dispatch table** (16-byte entries,
+`{id, getter, id+1, setter}`): `0x58` is registered under internal item IDs `0x50/0x51`
+(callbacks `FUN_200313C8`/`FUN_200314BC`), `0x65` under `0x52/0x53`
+(`FUN_2003145C`/`FUN_20030FD0`). However, **no label `char*` appears anywhere near these
+callbacks, getters, or the dispatch table** — the menu labels are **string-resource IDs
+resolved at runtime by the OpenVG menu system**, not inline strings. So static `char*`
+correlation terminates one hop short of a human label for `0x58/0x65/0x66`; naming them
+needs the menu string-resource map (same resource-manager indirection documented in §7a)
+or the DSP command reference. `0x56`/`0x57` remain the only two of the seven with a
+firmware-anchored name.
