@@ -176,3 +176,39 @@ Reading the value-lists refines the earlier `0x16` guesses:
 `58` is a strong candidate (3-state per-mode matches **[NOTCH] Switch**). `65/66/50/4F`
 could not be tied to a specific label because the item→handler binding is runtime-resolved;
 the full label map is nonetheless available for any menu-driven setting.
+
+#### Authoritative resolution (IC-7300 CI-V reference) + firmware cross-check
+
+The official IC-7300 CI-V reference names **all 19** command-`0x16` subcommands — exactly the
+set the firmware implements (independent cross-validation). Full list, with firmware
+agreement on the previously-open seven:
+
+| Sub | Function (manual) | Values |
+|-----|-------------------|--------|
+| 02 | Preamp | OFF / Preamp1 / Preamp2 |
+| 12 | AGC | FAST / MID / SLOW |
+| 22 | Noise Blanker | OFF/ON |
+| 40 | Noise Reduction | OFF/ON |
+| 41 | Auto Notch | OFF/ON |
+| 42 | Repeater Tone | OFF/ON |
+| 43 | Tone Squelch | OFF/ON |
+| 44 | Speech Compressor | OFF/ON |
+| 45 | Monitor | OFF/ON |
+| 46 | VOX | OFF/ON |
+| 47 | BK-IN | OFF / Semi / Full |
+| 48 | Manual Notch | OFF/ON |
+| **4F** | **Twin Peak Filter** (RTTY only) | OFF/ON |
+| **50** | **Dial Lock** | OFF/ON |
+| **56** | **DSP Filter Type** | SHARP / SOFT |
+| **57** | **Manual Notch Width** | WIDE / MID / NAR |
+| **58** | **SSB Transmit Bandwidth** | WIDE / MID / NAR |
+| **65** | **IP+ function** | OFF/ON |
+| **66** | **TX Inhibit function** | OFF/ON |
+
+Firmware agreement: value-counts match exactly (56→2, 57/58→3, rest on/off); `0x65` is the
+global 1-bit flag at `0x203902F9` b3 (IP+), `0x66` the flag at `0x203902D8` b5 + a triggered
+action (TX Inhibit). This **supersedes earlier tentative labels** — `0x57` is *Manual Notch
+Width* (not FIL1/2/3) and `0x58` is *SSB TX Bandwidth* (not the NOTCH switch; the
+Auto/Manual/Auto-Manual "[NOTCH] Switch" items are `1A 05 0050/0051`, per the same reference).
+All seven DSP subcommands are now definitively named — manual-authoritative and
+firmware-validated.
