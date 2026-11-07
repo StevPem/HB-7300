@@ -1,0 +1,28 @@
+# Do NOT commit copyrighted / proprietary material.
+# Icom firmware is Icom's copyright; the embedded fonts are proprietary (Iwata Corp.).
+# Supply your own firmware file to reproduce; nothing here redistributes Icom/Iwata IP.
+
+# Firmware inputs & derived binaries
+*.dat
+*.bin
+main_image*.bin
+dec_*.bin
+
+# Extracted proprietary fonts & rendered vendor artwork
+*.ttf
+*.otf
+*.png
+*.bmp
+
+# Reverse-engineering working dirs
+ghidra/
+ghidra_proj*/
+pyproj*/
+*.gpr
+*.rep
+*.lock
+funcs.json
+cands.json
+emu_hits.json
+*.o
+__pycache__/
