@@ -97,6 +97,7 @@ docs/IC-7300_firmware_analysis.md   full analysis report (container, boot, LZSS,
 docs/CI-V_command_table.md          reconstructed CI-V command/subcommand reference
 docs/menu_labels.md                 full menu label map (262 items; the menu-resolver output)
 docs/modding-feasibility.md         custom-firmware feasibility: no signature, CRC32+MD5 only (GO)
+docs/hardware.md                    silicon map (R7S721000/TMS320C6745/Cyclone IV) + feature-feasibility matrix
 tools/depack_lzss.py                LZSS depacker (main image extractor)
 tools/civ_extract.py                dump the CI-V command table from the image
 tools/render_assets.py              render the raw 8-bpp UI bitmaps
