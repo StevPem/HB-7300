@@ -100,7 +100,10 @@ docs/modding-feasibility.md         custom-firmware feasibility: no signature, C
 docs/hardware.md                    silicon map (R7S721000/TMS320C6745/Cyclone IV) + feature-feasibility matrix
 docs/dsp-interface.md               MAIN<->DSP control interface: 25-param shadow table, apply/queue transport, f/w load
 docs/rx-signal-access.md            what RX data the main CPU can see (no audio tap -> decoders belong on DSP/PC)
+docs/flash-driver.md                SPI-NOR flash driver (W25 via SPIBSC): erase/program primitive for reflashing
+docs/container-format.md            .dat container: 7 section-lengths + per-section MD5; differential 64KB flash
 tools/depack_lzss.py                LZSS depacker (main image extractor)
+tools/reseal.py                     verify / re-seal the .dat (recompute MAIN-image MD5 after a mod)
 tools/civ_extract.py                dump the CI-V command table from the image
 tools/render_assets.py              render the raw 8-bpp UI bitmaps
 tools/ghidra_load.py                PyGhidra loader (correct base + flash mapped)
