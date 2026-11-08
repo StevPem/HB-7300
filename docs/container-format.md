@@ -49,4 +49,7 @@ update `hdr[0]` too (subsequent sections shift).
 ## Status
 - ✅ Header, section-length semantics, per-section MD5 integrity, differential 64 KB flash — all verified.
 - ✅ Working reseal for the MAIN image (`tools/reseal.py`).
+- ✅ Firmware-compatible LZSS **compressor** (`tools/pack_lzss.py`, round-trip verified) and full
+  **repack chain** (`tools/repack_main.py`): extract → modify → recompress → re-seal, demonstrated
+  end-to-end (produces a valid .dat whose MAIN image decodes to the modified bytes).
 - ◻ DSP/FPGA section inner record format — open (only needed for DSP/FPGA mods).

@@ -90,6 +90,24 @@ python3 tools/render_assets.py ic7300_firmware.dat
 GHIDRA_INSTALL_DIR=/path/to/ghidra python3 tools/ghidra_load.py main_image.bin ic7300_firmware.dat
 ```
 
+### Build a modified MAIN image (end-to-end, verified)
+
+The full repack chain is implemented and self-verifying — there is no signature, so a recomputed
+MD5 re-seals the container (see [`docs/modding-feasibility.md`](docs/modding-feasibility.md),
+[`docs/container-format.md`](docs/container-format.md)):
+
+```bash
+python3 tools/repack_main.py extract ic7300_firmware.dat main.bin   # LZSS-decompress the MAIN image
+# ... edit main.bin (it is the 0x20005000 ARM image) ...
+python3 tools/repack_main.py rebuild ic7300_firmware.dat main.bin out.dat   # recompress + re-seal
+python3 tools/reseal.py verify out.dat                               # independent MD5 check
+```
+
+`rebuild` recompresses with `pack_lzss.py` (round-trip verified against the firmware's decoder),
+writes it back 0xFF-padded (section length unchanged), preserves fonts/other sections, and fixes
+section 0's MD5. **Flashing a bad image can brick the radio** — keep the original, understand the
+dual-image recovery path first, and keep emissions type-compliant for your licence.
+
 ## Repo contents
 
 ```
@@ -103,6 +121,8 @@ docs/rx-signal-access.md            what RX data the main CPU can see (no audio 
 docs/flash-driver.md                SPI-NOR flash driver (W25 via SPIBSC): erase/program primitive for reflashing
 docs/container-format.md            .dat container: 7 section-lengths + per-section MD5; differential 64KB flash
 tools/depack_lzss.py                LZSS depacker (main image extractor)
+tools/pack_lzss.py                  LZSS compressor (firmware-compatible; round-trip verified)
+tools/repack_main.py                full chain: extract / rebuild a modified MAIN image into a .dat
 tools/reseal.py                     verify / re-seal the .dat (recompute MAIN-image MD5 after a mod)
 tools/civ_extract.py                dump the CI-V command table from the image
 tools/render_assets.py              render the raw 8-bpp UI bitmaps
