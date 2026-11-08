@@ -59,5 +59,5 @@ Legend: ✅ feasible · ⚠️ conceivable but gated · ❌ infeasible.
 - **On-radio custom firmware** (the no-signature "GO" from `modding-feasibility.md`): aim at
   light MAIN-CPU features (UI/menu/CI-V) and, eventually, a **CW decoder** — not ML modems.
 - **To ever touch the DSP/FPGA:** first obtain their firmware blobs (flash regions
-  `0x18400000`/`0x187F0000`, versions `SX3765 V0.30`/`V0.9H`) and the main↔DSP load/command
+  `0x18400000`/`0x187F0000`, the `SX3765 Vx.xx` strings are front-panel RL78 MCU version checks, not DSP versions) and the main↔DSP load/command
   protocol; then assess within the 256 KB ceiling. Larger, separate project.

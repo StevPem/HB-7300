@@ -14,9 +14,9 @@ The `.dat` file is **not** an encrypted blob — it is a flat image for a **Rene
 
 - **3,524,204 bytes (3.36 MB)** of valid IC‑7300 main‑CPU application, loaded at **`0x20005000`**.
 - Confirmed via a clean ARM vector table, correct relocation of all literals to `0x2000xxxx`, entropy dropping from ~7.6 (compressed) to ~5.6 (code), and ~6,800 coherent strings.
-- Internal application version: **`SX3765 V4.96-000`**.
+- Embedded string **`SX3765 V4.96-000`** — **correction:** this is a *compatibility version check for the front-panel/display MCU* (IC501, Renesas RL78, marked `SX-3765C-1`), **not** the main firmware's own version (the user-facing version is v1.42). See Related work.
 
-The decompressed image reveals the full software stack: a Renesas µITRON‑style RTOS, a FAT12/16/32 SD‑card driver, libpng + FreeType2 + OpenVG for the color display, the CI‑V (CAT) control protocol, and the DSP/FPGA supervision for the direct‑sampling SDR receiver. Ghidra auto‑analysis of the clean image recovered **6,743 functions** and detected **embedded PNG image assets** (UI graphics) at `0x200CE460`, `0x200E6DD4`, …
+The decompressed image reveals the full software stack: the **FreeRTOS** kernel (Renesas RZ/A1H port, with Icom customizations), a FAT12/16/32 SD‑card driver, libpng + FreeType2 + OpenVG for the color display, the CI‑V (CAT) control protocol, and the DSP/FPGA supervision for the direct‑sampling SDR receiver. Ghidra auto‑analysis of the clean image recovered **6,743 functions** and detected **embedded PNG image assets** (UI graphics) at `0x200CE460`, `0x200E6DD4`, …
 
 ---
 
@@ -106,13 +106,13 @@ This matched perfectly: output began with the expected `E59FF018` vector table a
 
 - **Load address:** `0x20005000`. **Valid size:** 3,524,204 bytes (`main_image_clean.bin`); the declared length (`0x390B18`) includes a trailing `0xFF` pad region.
 - **Vector table** at `0x20005000`; reset `0x20005050`, handlers `0x200050CC`, `0x200056DC`, …
-- **Version:** `SX3765 V4.96-000`. An embedded history table also lists `V3.41, V4.41, V4.61, V4.71, V4.81`.
+- **`SX3765 Vx.xx` strings** are front-panel-MCU (RL78) compatibility checks, not the main app version (see correction above); the history table lists the display-MCU versions `V3.41…V4.96`.
 
 ### Subsystem / feature map (string‑ and structure‑backed)
 
 | Subsystem | Evidence |
 |-----------|----------|
-| **RTOS** | Renesas µITRON‑style kernel: `GRP_FS` filesystem layer, `no task environment`, task/mutex handling, "Renesas Electronics" |
+| **RTOS** | **FreeRTOS** (Renesas RZ/A1H port AN R01AN5093, Icom-customized) — corrected from an earlier "µITRON-style" guess; `GRP_FS` filesystem layer sits on top |
 | **SD card + FAT** | `RENESAS RZ/A1 SD Driver Ver4.01`; `FAT12/16/32`, cluster/EOC management; paths `C:\IC-7300\{Voice,VoiceTx,Decode\Rtty,Capture,Setting,IC-7300_factory}` |
 | **Voice memory / recording** | `voicetx1..8.wav`, "Memory TX and Data Saving to SD supported" |
 | **Display / GUI** | **libpng 1.6.12**, **FreeType2** (`TxtRender_FT2_*`, TrueType glyph paths), **OpenVG** (`TxtRender_VG_*`) for the 4.3" color touch TFT |
@@ -232,7 +232,7 @@ Legend: **[here]** = doable from this file; **[needs artifacts]** = requires a f
 
 | # | Layer | Scope | Status | Method | Effort |
 |---|-------|-------|--------|--------|--------|
-| 1 | Boot→runtime | Trace `0x200045D0`→`main`→RTOS init→task graph→event loop; identify µITRON variant & syscalls | [here] | Ghidra decompiler from reset vector | S–M |
+| 1 | Boot→runtime | Trace `0x200045D0`→`main`→RTOS init→task graph→event loop; identify FreeRTOS task set & syscalls | [here] | Ghidra decompiler from reset vector | S–M |
 | 2 | Hardware/peripherals | Map `0xFCFExxxx` (clock/standby, INTC) + drivers: VDC5 LCD/framebuffer, touch, I²S codec, UART, USB, SPI/SD, GPIO (relays/PTT/fan) | [here] | RZ/A1 HW manual + MMIO xrefs | M |
 | 3 | **DSP/FPGA signal path** | The direct-sampling core: FPGA ADC/DDC + DSP demod/filter/AGC/NR math | **[needs artifacts]** | Needs full flash or Icom DSP/FPGA images + separate toolchain; from *here* only the main-CPU side (load + control/register protocol) | L |
 | 4 | **CI-V / CAT** | Full command dispatcher: command table, params, effects | [here] | Decompile dispatcher (in progress) | M |

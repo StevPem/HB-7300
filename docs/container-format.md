@@ -22,8 +22,14 @@ offset   size      field
 - **Partial updates:** a `.dat` only carries the sections being updated, so the present sections
   don't sum to the (full-device) header. The example file has section 0 (MAIN, `0x252BF0`) and
   section 1 present; the rest is the DSP/FPGA payload.
-- **Sections 2+ (DSP/FPGA)** use an inner **address/length record** sub-format (not the simple
-  data+MD5 of the MAIN image) — not yet fully modelled; not needed to mod the MAIN CPU.
+- **Sections 2+ identified** (via jeskko/ic7300-homebrew — see Related work): the three components
+  after the MAIN region are **DSP Program** (a TI **AIS** boot script, magic `TIPA`/`0x41504954`, for
+  the TMS320C6745), **DSP Data**, and the **FPGA** bitstream (Cyclone IV). Each is LZSS+MD5 like the
+  MAIN image, but the header fields pair up as **`size2/4/6` = compressed lengths** and
+  **`size3/5/7` = decompressed lengths**, with offsets `comp0 = size1+0x3c`, `comp1 = comp0+size2+0x10`,
+  `comp2 = comp1+size4+0x10`. (Our `reseal.py` walks the simple MAIN sections only and therefore
+  "mismatches" at the first component, which uses `size2` not `size3` — expected, and harmless since we
+  only re-seal the MAIN image.)
 
 ## Integrity & flashing (from the code)
 - Integrity is **standard MD5 per section** — **no signature** (see `modding-feasibility.md`).

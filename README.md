@@ -9,6 +9,23 @@ Reverse-engineering notes, tooling, and a reconstructed CI-V command reference f
 > `.dat` (e.g. from Icom's official update) to reproduce any result. See
 > [Legal / scope](#legal--scope).
 
+## Related work
+
+A far more complete, independent effort exists: **[jeskko/ic7300-homebrew](https://github.com/jeskko/ic7300-homebrew)**
+— it covers everything here and much more, including a full **TMS320C6745 DSP disassembly** and the
+SCIF5/McASP1 **DSP link protocol**, the **FPGA link**, a **custom QEMU machine** that boots real firmware
+to a drawn screen, and an **SDK** that runs custom C apps from the SD card. Analysis there spans all 10
+firmware releases. **Prefer it as the primary reference**, especially for the DSP/FPGA side (our "layer-3
+gap") and anything dynamic.
+
+This repo's value is as an **independent corroboration** reached from scratch: it agrees with theirs on
+the container offset math (`comp0 = size1+0x3c`), LZSS + a from-scratch compressor, no-signature/MD5-only
+integrity, the SPI-NOR driver at `0x3FEFA000`, dual A/B slots, the 43-entry CI-V dispatcher, the
+`0x20005000` base, and the hardware BOM. Their work also **corrected three items** here (now fixed): the
+kernel is **FreeRTOS** (not "µITRON-style"); **`SX3765`** is the front-panel RL78 MCU's version string
+(not the main-CPU version); and the container's post-MAIN components are **DSP Program (TI AIS) / DSP Data /
+FPGA** (`size2/4/6`=compressed, `size3/5/7`=decompressed).
+
 ---
 
 ## What the IC-7300 runs
