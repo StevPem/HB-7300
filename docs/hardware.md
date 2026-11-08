@@ -37,9 +37,9 @@ processed audio/metering. Any modem (FreeDV/FT8) needs that IQ/audio, i.e. the D
 | Feature | MAIN CPU (RZ/A1) | DSP (C6745, 256 KB) | FPGA (Cyclone IV) | PC (USB) | Companion SBC |
 |---------|------------------|---------------------|-------------------|----------|----------------|
 | **RADE / FreeDV V2** (neural, ~12–16 MB float32 weights) | ❌ weights > total RAM; no IQ | ❌ **~48× too little RAM**; DSP saturated | ❌ would need an HDL NN accelerator | ✅ freedv-gui today | ✅ Pi 4/5 runs `rade_c` |
-| **FT8** (FFT + LDPC, needs accurate time base) | ❌ heavy; no IQ/audio path | ⚠️ maybe fits compute, but 256 KB + saturated + no toolchain access | — | ✅ WSJT-X today | ✅ |
-| **Classic FreeDV** (Codec2 700D/E, light DSP) | ❌ no IQ/audio path | ⚠️ plausibly fits, but needs DSP f/w + 256 KB budget + audio taps | — | ✅ | ✅ |
-| **CW decoder** (narrowband envelope/Goertzel, light) | ❌ **no audio tap** — codecs are on the DSP (see rx-signal-access.md) | ✅ natural fit (audio is here); tiny — but gated on DSP blobs+toolchain | — | ✅ | ✅ |
+| **FT8** (FFT + LDPC, needs accurate time base) | ⚠️ feasible as an app — RX audio available; FFT+LDPC fits 448 KB heap (ft8_lib-class), compute tight but 15 s cycle helps; TX via DR_AF+PTT | ⚠️ 256 KB + saturated | — | ✅ WSJT-X today | ✅ |
+| **Classic FreeDV** (Codec2 700D/E, light DSP) | ⚠️ plausible as an app — Codec2 is small; RX+TX audio paths exist | ⚠️ fits but needs DSP f/w | — | ✅ | ✅ |
+| **CW decoder** (narrowband envelope/Goertzel, light) | ✅ **feasible** — main CPU gets a 48 kHz demod-audio ring (corrected); a homebrew app can tap it (jeskko SDK) | ✅ (audio is here too) | — | ✅ | ✅ |
 | **UI / menu / CI-V tweaks** | ✅ reachable & flashable (no signature) | — | — | n/a | n/a |
 
 Legend: ✅ feasible · ⚠️ conceivable but gated · ❌ infeasible.

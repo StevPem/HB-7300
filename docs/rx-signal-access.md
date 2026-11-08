@@ -1,5 +1,17 @@
 # RX signal access on the main CPU — what a decoder can (and can't) see
 
+> **CORRECTION (via jeskko/ic7300-homebrew).** The conclusion below — "no audio tap on the main
+> CPU" — is **wrong**. The main CPU *does* receive **demodulated RX audio** from the DSP over an
+> SSIF/I2S link: the `DX_REC L` stream is kept in a **48 kHz ring at `0x203FBDC0`** (feeding the SD-card
+> QSO recorder and the audio scope), and `DX_FMT L` carries per-mode demod output too. There is also a
+> **TX audio injection path** (`DR_AF L`, used for voice-memory playback at `0x20067458`). I missed these
+> by examining only the metering and the SCIF5 DSP-command link, not the SSIF audio channel. Net: an
+> on-radio **CW / SSTV / FT8-RX decoder is feasible on the main CPU** — jeskko's SDK already ships a
+> working **SSTV receiver** app that taps the 48 kHz ring (decimated to 12 kHz) via a loader hook, and
+> TX digimodes are feasible in principle via the `DR_AF` path + CI-V PTT. See their `notes/dsp-protocol.md`
+> and `sdk/`.
+
+
 Investigates what receive-side signal data the RZ/A1 main CPU can observe — the prerequisite
 for any on-radio decoder (CW, digimodes). **Key result: the main CPU has no audio-rate tap.**
 
