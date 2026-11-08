@@ -121,7 +121,7 @@ flash dump, the DSP/FPGA images, or hardware.
 | 5 | Radio control | band/PLL, BPF+relays, internal ATU, SWR/power metering, TX gain/ALC, scope flow | `[here]` |
 | 6 | Settings/cal/service | menu model, calibration data layout, ADJUST-mode entry/functions | `[here]` |
 | 7 | Graphics pipeline | interpret OpenVG path format / emulate renderer; map screen resource manager | `[here]` |
-| 8 | Update & integrity | **no signature; CRC32+MD5 only (GO)**; **flash write primitive reversed** (flash-driver.md). Remaining: 7-u32 header fields + per-image CRC/MD5 placement | mostly done |
+| 8 | Update & integrity | **DONE for MAIN**: no signature; 7 u32 = section lengths; per-section MD5 (verified); differential 64KB flash; flash driver + reseal tool. Open: DSP/FPGA section sub-format | done (MAIN) |
 | 9 | Audio | voice memory record/playback (WAV), voice synth, RTTY/PSK decoders | `[here]` |
 | 10 | Dynamic analysis | QEMU RZ/A1 / full-system emulation to *run* the firmware | optional |
 
